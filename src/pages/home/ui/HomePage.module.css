@@ -1,0 +1,80 @@
+.page {
+  min-height: 100vh;
+  padding: 12px 16px 40px;
+  color: #1f2330;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(99, 91, 255, 0.14), transparent 28%),
+    #f4f6fa;
+}
+
+.header,
+.hero,
+.page > section {
+  width: min(100%, 560px);
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #635bff, #8b85ff);
+  box-shadow: 0 10px 24px rgba(99, 91, 255, 0.28);
+}
+
+.eyebrow {
+  color: #635bff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.title {
+  margin: 7px 0 8px !important;
+  max-width: 480px;
+  /* font-size: clamp(32px, 9vw, 46px) !important; */
+  font-size: 12px;
+  line-height: 1.08 !important;
+  letter-spacing: -0.05em;
+}
+
+.subtitle {
+  max-width: 420px;
+  margin-bottom: 6px !important;
+  color: #697386;
+  font-size: 16px;
+
+}
+
+@media (min-width: 700px) {
+  .page {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 460px) {
+  .header :global(.ant-btn) {
+    padding-inline: 12px;
+  }
+
+  .header :global(.ant-btn span:last-child) {
+    display: none;
+  }
+}

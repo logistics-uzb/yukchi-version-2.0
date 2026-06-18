@@ -1,0 +1,26 @@
+.card {
+  width: min(100%, 620px);
+  padding: 16px;
+  box-shadow: 0 24px 70px rgba(31, 35, 48, 0.12);
+}
+
+.title {
+  margin: 0 0 8px !important;
+  font-size: clamp(36px, 7vw, 56px) !important;
+  letter-spacing: -0.04em;
+}
+
+.description {
+  max-width: 500px;
+  margin-bottom: 0 !important;
+  font-size: 17px;
+}
+
+.successIcon {
+  margin-right: 8px;
+  color: #52c41a;
+}
+
+.button {
+  align-self: flex-start;
+}

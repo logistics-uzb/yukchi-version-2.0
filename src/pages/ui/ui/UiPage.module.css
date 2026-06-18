@@ -1,0 +1,84 @@
+.page {
+  min-height: 100vh;
+  padding: 48px clamp(20px, 5vw, 72px) 72px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(99, 91, 255, 0.12), transparent 28%),
+    #f4f6fa;
+}
+
+.header {
+  max-width: 1440px;
+  margin: 0 auto 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.eyebrow {
+  color: #635bff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.pageTitle {
+  margin: 6px 0 4px !important;
+  font-size: clamp(32px, 5vw, 48px) !important;
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  max-width: 620px;
+  margin: 0 !important;
+  color: #697386;
+  font-size: 16px;
+}
+
+.grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.card {
+  min-width: 0;
+  border: 1px solid #e8eaf0;
+  box-shadow: 0 12px 32px rgba(31, 35, 48, 0.06);
+}
+
+.wideCard {
+  grid-column: 1 / -1;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding-top: 32px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wideCard {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
