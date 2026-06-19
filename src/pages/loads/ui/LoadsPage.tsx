@@ -1,38 +1,50 @@
-import { ArrowLeftOutlined, ReloadOutlined } from '@ant-design/icons'
-import { Alert, Button, Empty, Skeleton, Typography } from 'antd'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useGetLoadsQuery } from '@/entities/load'
-import { countries } from '@/shared/consts/countries'
-import { LoadCard } from '@/widgets/load-card'
-import styles from './LoadsPage.module.css'
+import {
+  ArrowLeftOutlined,
+  ArrowUpOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
+import { Alert, Button, Empty, FloatButton, Skeleton, Typography } from "antd";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useGetLoadsQuery } from "@/entities/load";
+import { countries } from "@/shared/consts/countries";
+import { LoadCard } from "@/widgets/load-card";
+import styles from "./LoadsPage.module.css";
 
-const { Title, Text } = Typography
+const { Title, Text } = Typography;
 
 function getRegionName(countryId?: string, regionId?: string) {
-  if (!countryId || !regionId) return undefined
+  if (!countryId || !regionId) return undefined;
 
   return countries
     .find((country) => country.id === countryId)
-    ?.regions.find((region) => region.id === regionId)?.name
+    ?.regions.find((region) => region.id === regionId)?.name;
 }
 
 export function LoadsPage() {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const countryFrom = searchParams.get('countryFrom') ?? undefined
-  const regionFrom = searchParams.get('regionFrom') ?? undefined
-  const countryTo = searchParams.get('countryTo') ?? undefined
-  const regionTo = searchParams.get('regionTo') ?? undefined
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const countryFrom = searchParams.get("countryFrom") ?? undefined;
+  const regionFrom = searchParams.get("regionFrom") ?? undefined;
+  const countryTo = searchParams.get("countryTo") ?? undefined;
+  const regionTo = searchParams.get("regionTo") ?? undefined;
   const params = {
-    aiStatus: 'LOAD_POST',
+    aiStatus: "LOAD_POST",
+    isComplete: "TRUE",
     countryFrom,
     regionFrom,
     countryTo,
     regionTo,
-  }
-  const { data: loads = [], isLoading, isError, refetch } = useGetLoadsQuery(params)
-  const fromRegionName = getRegionName(countryFrom, regionFrom)
-  const toRegionName = getRegionName(countryTo, regionTo)
+  };
+  const {
+    data: loads = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetLoadsQuery(params);
+  const fromRegionName = getRegionName(countryFrom, regionFrom);
+  const toRegionName = getRegionName(countryTo, regionTo);
+
+  console.log(loads, "lorem");
 
   return (
     <main className={styles.page}>
@@ -46,10 +58,10 @@ export function LoadsPage() {
           aria-label="Orqaga"
         />
         <div>
-          <Title level={2}>Mos yuklar</Title>
+          <Title level={2}>Mos yuklar - {loads.length}</Title>
           <Text type="secondary">
-            {fromRegionName ?? 'Barcha hududlar'} →{' '}
-            {toRegionName ?? 'Barcha hududlar'}
+            {fromRegionName ?? "Barcha hududlar"} →{" "}
+            {toRegionName ?? "Barcha hududlar"}
           </Text>
         </div>
         <Button
@@ -88,12 +100,20 @@ export function LoadsPage() {
         {!isLoading && !isError && loads.length === 0 && (
           <div className={styles.empty}>
             <Empty description="Bu yo‘nalishda hozircha yuk yo‘q" />
-            <Button type="primary" onClick={() => navigate('/')}>
+            <Button type="primary" onClick={() => navigate("/")}>
               Yo‘nalishni o‘zgartirish
             </Button>
           </div>
         )}
       </section>
+
+      <FloatButton.BackTop
+        type="primary"
+        style={{ height: 60, width: 60 }}
+        icon={<ArrowUpOutlined />}
+        visibilityHeight={300}
+        aria-label="Sahifa boshiga qaytish"
+      />
     </main>
-  )
+  );
 }

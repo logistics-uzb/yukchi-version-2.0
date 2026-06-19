@@ -20,7 +20,10 @@
   gap: 10px;
   padding: 12px 0 18px;
   background: rgba(244, 246, 250, 0.88);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(6px);
+  border: 1px solid #e2e2e2;
+  border-radius: 20px;
+  margin-bottom: 15px;
 }
 
 .header h2 {

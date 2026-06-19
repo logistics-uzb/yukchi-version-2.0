@@ -1,4 +1,4 @@
-import { EnvironmentOutlined, SendOutlined, SwapOutlined } from '@ant-design/icons'
+import { EnvironmentOutlined, FlagOutlined, SwapOutlined } from '@ant-design/icons'
 import { Button, Card, Form, Select, Typography } from 'antd'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -93,7 +93,7 @@ export function RoutePlanner() {
 
           <LocationCard
             title="Qayerga"
-            icon={<SendOutlined />}
+            icon={<FlagOutlined />}
             tone="success"
             countryName="to_country"
             regionName="to_region"

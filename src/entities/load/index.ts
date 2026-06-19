@@ -1,5 +1,2 @@
-export {
-  useDeleteLoadMutation,
-  useGetLoadsQuery,
-} from './api/loadApi'
-export type { Load, LoadLocation } from './model/types'
+export { useGetLoadsQuery } from "./api/loadApi";
+export type { Load, LoadLocation } from "./model/types";

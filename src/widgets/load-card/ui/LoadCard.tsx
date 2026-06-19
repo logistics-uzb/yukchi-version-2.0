@@ -12,6 +12,7 @@ import { Flag } from "@/shared/ui/flag";
 import { regionDetector } from "@/shared/helpers/region-detector";
 import { timeAgo } from "@/shared/helpers/time-ago";
 import { getRegionName } from "@/shared/helpers/region-name";
+import { capitalize } from "@/shared/helpers/uppercase-first-letter";
 
 const { Title, Text } = Typography;
 
@@ -62,7 +63,7 @@ export function LoadCard({ load }: LoadCardProps) {
   const owner = load.companyName ?? load.ownerName;
   const weight = load.weight
     ? `${load.weight} ${load.cargoUnit === "tons" ? "tonna" : (load.cargoUnit ?? "")}`.trim()
-    : "Kelishiladi";
+    : null;
 
   const phone = load.phoneNumber ?? load.phone;
 
@@ -73,7 +74,7 @@ export function LoadCard({ load }: LoadCardProps) {
       <div className={styles.top}>
         <div>
           <Title ellipsis level={3}>
-            {load.title?.slice(0, 20) ?? "Yuk"}
+            {capitalize(load.title?.slice(0, 20) || "Yuk")}
           </Title>
           {owner && (
             <Text className={styles.owner}>
@@ -115,7 +116,17 @@ export function LoadCard({ load }: LoadCardProps) {
 
       <Flex gap={4} justify="space-between">
         <Button
-          style={{ fontWeight: "bold", width: "50%"}}
+          style={{ fontWeight: "bold", width: "50%" }}
+          size="large"
+          icon={<SendOutlined />}
+          href={phone ? `https://t.me/${phone}` : undefined}
+          aria-label="Bog‘lanish"
+          disabled={!phone}
+        >
+          Telegram
+        </Button>
+        <Button
+          style={{ fontWeight: "bold", width: "50%" }}
           type="primary"
           size="large"
           icon={<PhoneOutlined />}
@@ -124,18 +135,11 @@ export function LoadCard({ load }: LoadCardProps) {
         >
           Qo‘ng‘iroq qilish
         </Button>
-        <Button
-          style={{ fontWeight: "bold", width: "50%" }}
-          size="large"
-          icon={<SendOutlined />}
-          href={phone ? `https://t.me/${phone}` : undefined}
-          aria-label="Bog‘lanish"
-        >
-          Telegram
-        </Button>
       </Flex>
       <Text type="secondary" style={{ float: "right", marginTop: 8 }}>
-        {timeAgoValue.value} {timeAgoValue.unit} oldin
+        {timeAgoValue.value === 0 && timeAgoValue.unit === "daqiqa"
+          ? "hozir"
+          : `${timeAgoValue.value} ${timeAgoValue.unit} oldin`}
       </Text>
     </article>
   );
