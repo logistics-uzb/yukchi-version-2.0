@@ -29,3 +29,7 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
+
+.borderr {
+  border: 1px solid red !important;
+}

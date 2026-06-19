@@ -1,5 +1,9 @@
 import { API_ENDPOINTS, baseApi } from "@/shared/api";
-import type { GetLoadsParams, Load } from "../model/types";
+import type {
+  GetLoadsParams,
+  GetLoadsResponse,
+  Load,
+} from "../model/types";
 
 export const loadApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -8,6 +12,8 @@ export const loadApi = baseApi.injectEndpoints({
         url: API_ENDPOINTS.loads,
         params,
       }),
+      transformResponse: (response: GetLoadsResponse | Load[]) =>
+        Array.isArray(response) ? response : response.data?.data ?? [],
     }),
     deleteLoad: build.mutation<void, string>({
       query: (id) => ({

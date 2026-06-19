@@ -1,63 +1,84 @@
 import { EnvironmentOutlined, SendOutlined, SwapOutlined } from '@ant-design/icons'
 import { Button, Card, Form, Select, Typography } from 'antd'
-import { useState, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { countries } from '@/shared/config'
+import { countries } from '@/shared/consts/countries'
 import styles from './RoutePlanner.module.css'
 
 const { Text, Title } = Typography
 
-interface RoutePoint {
-  country: string
-  region: string
+interface FilterFormValues {
+  from_country?: string
+  from_region?: string
+  to_country?: string
+  to_region?: string
 }
 
-const regionOptions = [
-  'Toshkent',
-  'Andijon',
-  'Samarqand',
-  'Farg‘ona',
-  'Namangan',
-  'Buxoro',
-].map((region) => ({ label: region, value: region }))
+const countryOptions = countries.map((country) => ({
+  label: country.name,
+  value: country.id,
+}))
+
+function getRegionOptions(countryId: string) {
+  return (
+    countries
+      .find((country) => country.id === countryId)
+      ?.regions.map((region) => ({
+        label: region.name,
+        value: region.id,
+      })) ?? []
+  )
+}
 
 export function RoutePlanner() {
   const navigate = useNavigate()
-  const [from, setFrom] = useState<RoutePoint>({
-    country: 'uzbekistan',
-    region: 'Toshkent',
-  })
-  const [to, setTo] = useState<RoutePoint>({
-    country: 'uzbekistan',
-    region: 'Andijon',
-  })
+  const [form] = Form.useForm<FilterFormValues>()
+  const fromCountry = Form.useWatch('from_country', form)
+  const toCountry = Form.useWatch('to_country', form)
 
   const swapLocations = () => {
-    setFrom(to)
-    setTo(from)
+    const values = form.getFieldsValue()
+
+    form.setFieldsValue({
+      from_country: values.to_country,
+      from_region: values.to_region,
+      to_country: values.from_country,
+      to_region: values.from_region,
+    })
   }
 
-  const searchLoads = () => {
-    const params = new URLSearchParams({
-      fromCountry: from.country,
-      fromRegion: from.region,
-      toCountry: to.country,
-      toRegion: to.region,
-    })
+  const searchLoads = (values: FilterFormValues) => {
+    const searchParams = new URLSearchParams()
 
-    navigate(`/loads?${params.toString()}`)
+    if (values.from_country) {
+      searchParams.set('countryFrom', values.from_country)
+    }
+    if (values.from_region) {
+      searchParams.set('regionFrom', values.from_region)
+    }
+    if (values.to_country) {
+      searchParams.set('countryTo', values.to_country)
+    }
+    if (values.to_region) {
+      searchParams.set('regionTo', values.to_region)
+    }
+
+    const query = searchParams.toString()
+    navigate(query ? `/loads?${query}` : '/loads')
   }
 
   return (
     <section className={styles.section}>
-      <Form onFinish={searchLoads}>
+      <Form form={form} onFinish={searchLoads}>
         <div className={styles.routeGrid}>
           <LocationCard
             title="Qayerdan"
             icon={<EnvironmentOutlined />}
             tone="primary"
-            value={from}
-            onChange={setFrom}
+            countryName="from_country"
+            regionName="from_region"
+            countryValue={fromCountry}
+            form={form}
           />
 
           <Button
@@ -74,8 +95,10 @@ export function RoutePlanner() {
             title="Qayerga"
             icon={<SendOutlined />}
             tone="success"
-            value={to}
-            onChange={setTo}
+            countryName="to_country"
+            regionName="to_region"
+            countryValue={toCountry}
+            form={form}
           />
         </div>
 
@@ -96,16 +119,20 @@ interface LocationCardProps {
   title: string
   icon: ReactNode
   tone: 'primary' | 'success'
-  value: RoutePoint
-  onChange: (value: RoutePoint) => void
+  countryName: 'from_country' | 'to_country'
+  regionName: 'from_region' | 'to_region'
+  countryValue?: string
+  form: ReturnType<typeof Form.useForm<FilterFormValues>>[0]
 }
 
 function LocationCard({
   title,
   icon,
   tone,
-  value,
-  onChange,
+  countryName,
+  regionName,
+  countryValue,
+  form,
 }: LocationCardProps) {
   return (
     <Card className={styles.card} bordered={false}>
@@ -117,24 +144,27 @@ function LocationCard({
       <div className={styles.fields}>
         <label className={styles.field}>
           <Text>Mamlakat</Text>
-          <Select
-            variant="borderless"
-            value={value.country}
-            options={[...countries]}
-            showSearch
-            optionFilterProp="label"
-            onChange={(country) => onChange({ ...value, country })}
-          />
+          <Form.Item name={countryName} noStyle>
+            <Select
+              variant="borderless"
+              options={countryOptions}
+              showSearch
+              optionFilterProp="label"
+              onChange={() => form.setFieldValue(regionName, undefined)}
+              allowClear
+            />
+          </Form.Item>
         </label>
 
         <label className={styles.field}>
           <Text>Viloyat</Text>
-          <Select
-            variant="borderless"
-            value={value.region}
-            options={regionOptions}
-            onChange={(region) => onChange({ ...value, region })}
-          />
+          <Form.Item name={regionName} noStyle>
+            <Select
+              variant="borderless"
+              options={getRegionOptions(countryValue ?? '')}
+              allowClear
+            />
+          </Form.Item>
         </label>
       </div>
     </Card>
