@@ -26,7 +26,7 @@ jobs:
       - name: Deploy PROD
         run: |
           ssh -o StrictHostKeyChecking=no root@84.247.184.118 << 'EOF'
-            cd /home/Projects/prod/logist/yukchi/
+            cd /home/Projects/dev/yukchi-v2/yukchi-version-2.0
             git pull origin main
             docker compose -f docker-compose-prod.yml down
             docker compose -f docker-compose-prod.yml up -d --build
