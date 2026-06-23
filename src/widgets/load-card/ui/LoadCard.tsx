@@ -150,7 +150,7 @@ export function LoadCard({ load }: LoadCardProps) {
           size="large"
           icon={<PhoneOutlined />}
           onClick={callPhone}
-          disabled={!phoneUrl}
+          disabled={!phone}
         >
           Qo‘ng‘iroq qilish
         </Button>
