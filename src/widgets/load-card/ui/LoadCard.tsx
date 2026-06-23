@@ -47,6 +47,13 @@ function formatPrice(load: Load) {
   return `${formattedAmount} ${formattedCurrency}`;
 }
 
+function getPhoneUrl(phone?: string) {
+  if (!phone) return undefined;
+
+  const normalizedPhone = phone.trim().replace(/[^\d+*#,;]/g, "");
+  return normalizedPhone ? `tel:${normalizedPhone}` : undefined;
+}
+
 export function LoadCard({ load }: LoadCardProps) {
   const route = {
     from: {
@@ -64,13 +71,27 @@ export function LoadCard({ load }: LoadCardProps) {
     : null;
 
   const phone = load.phoneNumber ?? load.phone;
+  const phoneUrl = getPhoneUrl(phone);
 
   const timeAgoValue = timeAgo(load.sentToTelegramAt || "");
+
+  const callPhone = () => {
+    if (!phoneUrl) return;
+
+    const callLink = document.createElement("a");
+    callLink.href = phoneUrl;
+    callLink.target = "_blank";
+    callLink.rel = "noopener noreferrer";
+    callLink.style.display = "none";
+    document.body.appendChild(callLink);
+    callLink.click();
+    callLink.remove();
+  };
 
   return (
     <article className={styles.card}>
       <div className={styles.top}>
-        <div>
+        <div className={styles.summary}>
           <Title ellipsis level={3}>
             {capitalize(load.title?.slice(0, 20) || "Yuk")}
           </Title>
@@ -112,9 +133,9 @@ export function LoadCard({ load }: LoadCardProps) {
         {weight && <Tag color="volcano">{weight}</Tag>}
       </Flex>
 
-      <Flex gap={4} justify="space-between">
+      <Flex className={styles.actions} gap={8}>
         <Button
-          style={{ fontWeight: "bold", width: "50%" }}
+          className={styles.actionButton}
           size="large"
           icon={<SendOutlined />}
           href={phone ? `https://t.me/${phone}` : undefined}
@@ -124,17 +145,17 @@ export function LoadCard({ load }: LoadCardProps) {
           Telegram
         </Button>
         <Button
-          style={{ fontWeight: "bold", width: "50%" }}
+          className={styles.actionButton}
           type="primary"
           size="large"
           icon={<PhoneOutlined />}
-          href={phone ? `tel:${phone}` : undefined}
-          disabled={!phone}
+          onClick={callPhone}
+          disabled={!phoneUrl}
         >
           Qo‘ng‘iroq qilish
         </Button>
       </Flex>
-      <Text type="secondary" style={{ float: "right", marginTop: 8 }}>
+      <Text type="secondary" className={styles.time}>
         {timeAgoValue.value === 0 && timeAgoValue.unit === "daqiqa"
           ? "hozir"
           : `${timeAgoValue.value} ${timeAgoValue.unit} oldin`}
