@@ -37,6 +37,15 @@
   gap: 14px;
 }
 
+.virtualItem {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 390px;
+}
+
+.loadMore {
+  height: 1px;
+}
+
 .alert {
   margin-bottom: 14px;
 }

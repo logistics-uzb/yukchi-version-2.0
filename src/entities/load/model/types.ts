@@ -43,14 +43,23 @@ export interface GetLoadsParams {
   isComplete?: string;
   aiStatus?: string;
   limit?: number;
+  page?: number;
   countryFrom?: string;
   regionFrom?: string;
   countryTo?: string;
   regionTo?: string;
 }
 
+export interface LoadsPage {
+  count: number;
+  data: Load[];
+  limit: number;
+  page: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface GetLoadsResponse {
-  data?: {
-    data?: Load[];
-  };
+  status_code?: number;
+  data?: Partial<LoadsPage>;
 }

@@ -48,8 +48,6 @@ function formatPrice(load: Load) {
 }
 
 export function LoadCard({ load }: LoadCardProps) {
-  console.log(load, "load");
-
   const route = {
     from: {
       country: load.countryFrom,

@@ -1,2 +1,2 @@
 export { useGetLoadsQuery } from "./api/loadApi";
-export type { Load, LoadLocation } from "./model/types";
+export type { Load, LoadLocation, LoadsPage } from "./model/types";
