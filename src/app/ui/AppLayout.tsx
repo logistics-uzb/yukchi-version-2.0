@@ -1,5 +1,6 @@
 import { useRef, type TouchEvent } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import styles from "./app-layout.module.css";
 
 const SWIPE_START_EDGE = 300;
 const SWIPE_DISTANCE = 80;
@@ -37,7 +38,11 @@ export function AppLayout() {
   }
 
   return (
-    <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div
+      className={styles.app_layout}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <Outlet />
     </div>
   );

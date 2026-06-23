@@ -30,6 +30,12 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+input,
+select,
+textarea {
+  font-size: 16px !important;
+}
+
 .borderr {
   border: 1px solid red !important;
 }
