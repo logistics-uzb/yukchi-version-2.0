@@ -13,6 +13,9 @@ import { regionDetector } from "@/shared/helpers/region-detector";
 import { timeAgo } from "@/shared/helpers/time-ago";
 import { getRegionName } from "@/shared/helpers/region-name";
 import { capitalize } from "@/shared/helpers/uppercase-first-letter";
+import { formatDistanceDuration } from "../helpers/format-distance-duration";
+import { formatPrice } from "../helpers/format-price";
+import { getPhoneUrl } from "../helpers/format-phone-number";
 
 const { Title, Text } = Typography;
 
@@ -20,41 +23,9 @@ interface LoadCardProps {
   load: Load;
 }
 
-function formatPrice(load: Load) {
-  const amount = load.paymentAmount;
-  const currency = load.paymentCurrency || null;
-
-  if (!amount) return "Kelishiladi";
-
-  const formattedAmount =
-    amount > 1_000_000
-      ? `${amount / 1_000_000} mln`
-      : amount.toLocaleString("uz-UZ");
-
-  function formatCurrency(value: "sum" | "usd" | null) {
-    switch (value) {
-      case "sum":
-        return "so'm";
-      case "usd":
-        return "$";
-      default:
-        return "";
-    }
-  }
-
-  const formattedCurrency = formatCurrency(currency);
-
-  return `${formattedAmount} ${formattedCurrency}`;
-}
-
-function getPhoneUrl(phone?: string) {
-  if (!phone) return undefined;
-
-  const normalizedPhone = phone.trim().replace(/[^\d+*#,;]/g, "");
-  return normalizedPhone ? `tel:${normalizedPhone}` : undefined;
-}
-
 export function LoadCard({ load }: LoadCardProps) {
+  console.log(load, "load");
+
   const route = {
     from: {
       country: load.countryFrom,
@@ -69,6 +40,14 @@ export function LoadCard({ load }: LoadCardProps) {
   const weight = load.weight
     ? `${load.weight} ${load.cargoUnit === "tons" ? "tonna" : (load.cargoUnit ?? "")}`.trim()
     : null;
+
+  const distance = load.distanceKm
+    ? `${Number(load.distanceKm).toFixed()} km`
+    : "";
+
+  const distanceDurationInMinutes = load.distanceTimeMinutes
+    ? `~ ${formatDistanceDuration(+load.distanceTimeMinutes.toFixed())}`
+    : "";
 
   const phone = load.phoneNumber ?? load.phone;
   const phoneUrl = getPhoneUrl(phone);
@@ -102,13 +81,18 @@ export function LoadCard({ load }: LoadCardProps) {
             </Text>
           )}
         </div>
-        <span className={styles.price}>{formatPrice(load)}</span>
+        <Flex gap={8}>
+          <span className={styles.price}>{formatPrice(load)}</span>
+          {/* Per km */}
+        </Flex>
       </div>
 
       <div className={styles.route}>
         <Flex vertical align="center" className={styles.routeIcons}>
           <EnvironmentOutlined className={styles.startIcon} />
-          <div className={styles.line} />
+          <div className={styles.line}>
+            <span className={styles.distance}>{distance}</span>
+          </div>
           <FlagOutlined className={styles.endIcon} />
         </Flex>
         <div className={styles.routeContent}>
@@ -130,7 +114,10 @@ export function LoadCard({ load }: LoadCardProps) {
       </div>
 
       <Flex gap={4} style={{ marginBottom: 16 }}>
-        {weight && <Tag color="volcano">{weight}</Tag>}
+        {weight && <Tag color="geekblue">{weight}</Tag>}
+        {distanceDurationInMinutes && (
+          <Tag color="geekblue">{distanceDurationInMinutes}</Tag>
+        )}
       </Flex>
 
       <Flex className={styles.actions} gap={8}>
@@ -155,11 +142,21 @@ export function LoadCard({ load }: LoadCardProps) {
           Qo‘ng‘iroq qilish
         </Button>
       </Flex>
-      <Text type="secondary" className={styles.time}>
-        {timeAgoValue.value === 0 && timeAgoValue.unit === "daqiqa"
-          ? "hozir"
-          : `${timeAgoValue.value} ${timeAgoValue.unit} oldin`}
-      </Text>
+      <Flex style={{ marginTop: 16 }} gap={8} justify="space-between">
+        <Flex gap={16}>
+          {/* <Text type="secondary">
+            {mockStats.views} <EyeOutlined />
+          </Text>
+          <Text type="secondary">
+            {mockStats.calls} <PhoneOutlined />
+          </Text> */}
+        </Flex>
+        <Text type="secondary">
+          {timeAgoValue.value === 0 && timeAgoValue.unit === "daqiqa"
+            ? "hozir"
+            : `${timeAgoValue.value} ${timeAgoValue.unit} oldin`}
+        </Text>
+      </Flex>
     </article>
   );
 }

@@ -19,7 +19,8 @@ export interface Load {
   vehicleType?: string;
   pickupDate?: string;
   volume?: number;
-  distance?: number;
+  distanceKm?: number;
+  distanceTimeMinutes: number;
   price?: number;
   currency?: string;
   paymentAmount?: number;
