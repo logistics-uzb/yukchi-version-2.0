@@ -16,6 +16,8 @@ import { capitalize } from "@/shared/helpers/uppercase-first-letter";
 import { formatDistanceDuration } from "../helpers/format-distance-duration";
 import { formatPrice } from "../helpers/format-price";
 import { getPhoneUrl } from "../helpers/format-phone-number";
+import { formatCurrency } from "../helpers/format-currency";
+import { setSpaceFromEnd } from "@/shared/helpers/set-space-from-end";
 
 const { Title, Text } = Typography;
 
@@ -36,14 +38,21 @@ export function LoadCard({ load }: LoadCardProps) {
       region: load.regionTo,
     },
   };
+
   const owner = load.companyName ?? load.ownerName;
   const weight = load.weight
     ? `${load.weight} ${load.cargoUnit === "tons" ? "tonna" : (load.cargoUnit ?? "")}`.trim()
     : null;
 
   const distance = load.distanceKm
-    ? `${Number(load.distanceKm).toFixed()} km`
+    ? Number(load.distanceKm).toFixed()
     : "";
+
+  const pricePerKm = load.pricePerKm
+    ? `${Number(load.pricePerKm).toFixed(1)}`
+    : "";
+
+  const currency = load.paymentCurrency && formatCurrency(load.paymentCurrency);
 
   const distanceDurationInMinutes = load.distanceTimeMinutes
     ? `~ ${formatDistanceDuration(+load.distanceTimeMinutes.toFixed())}`
@@ -83,7 +92,6 @@ export function LoadCard({ load }: LoadCardProps) {
         </div>
         <Flex gap={8}>
           <span className={styles.price}>{formatPrice(load)}</span>
-          {/* Per km */}
         </Flex>
       </div>
 
@@ -91,7 +99,7 @@ export function LoadCard({ load }: LoadCardProps) {
         <Flex vertical align="center" className={styles.routeIcons}>
           <EnvironmentOutlined className={styles.startIcon} />
           <div className={styles.line}>
-            <span className={styles.distance}>{distance}</span>
+            <span className={styles.distance}>{setSpaceFromEnd(distance)} km</span>
           </div>
           <FlagOutlined className={styles.endIcon} />
         </Flex>
@@ -114,10 +122,11 @@ export function LoadCard({ load }: LoadCardProps) {
       </div>
 
       <Flex gap={4} style={{ marginBottom: 16 }}>
-        {weight && <Tag color="geekblue">{weight}</Tag>}
+        {weight && <Tag color="volcano">{weight}</Tag>}
         {distanceDurationInMinutes && (
           <Tag color="geekblue">{distanceDurationInMinutes}</Tag>
         )}
+        {pricePerKm && <Tag color="geekblue">{setSpaceFromEnd(pricePerKm)} {currency}/km</Tag>}
       </Flex>
 
       <Flex className={styles.actions} gap={8}>

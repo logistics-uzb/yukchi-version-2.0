@@ -17,6 +17,7 @@ import { useGetLoadsQuery, type Load } from "@/entities/load";
 import { countries } from "@/shared/consts/countries";
 import { LoadCard } from "@/widgets/load-card";
 import styles from "./LoadsPage.module.css";
+import { setSpaceFromEnd } from "@/shared/helpers/set-space-from-end";
 
 const { Title, Text } = Typography;
 
@@ -126,7 +127,7 @@ export function LoadsPage() {
         />
         <div>
           <Title level={2}>
-            Mos yuklar - {loadsPage?.total ?? loads.length}
+            Mos yuklar - {setSpaceFromEnd(loadsPage?.total || "") ?? setSpaceFromEnd(loads.length)}
           </Title>
           <Text type="secondary">
             {fromRegionName ?? "Barcha hududlar"} →{" "}

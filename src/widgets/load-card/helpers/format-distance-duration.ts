@@ -5,9 +5,23 @@ export const formatDistanceDuration = (minutes: number): string => {
 
   const parts: string[] = [];
 
-  if (days) parts.push(`${days} kun`);
-  if (hours) parts.push(`${hours} soat`);
-  if (mins || parts.length === 0) parts.push(`${mins} daqiqa`);
+  if (days) {
+    parts.push(`${days} kun`);
+
+    if (hours) {
+      parts.push(`${hours} soat`);
+    }
+
+    return parts.join(" ");
+  }
+
+  if (hours) {
+    parts.push(`${hours} soat`);
+  }
+
+  if (mins || parts.length === 0) {
+    parts.push(`${mins} daqiqa`);
+  }
 
   return parts.join(" ");
 };

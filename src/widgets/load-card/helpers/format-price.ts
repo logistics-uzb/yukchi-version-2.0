@@ -1,4 +1,5 @@
 import type { Load } from "@/entities/load";
+import { formatCurrency } from "./format-currency";
 
 export function formatPrice(load: Load) {
   const amount = load.paymentAmount;
@@ -11,16 +12,7 @@ export function formatPrice(load: Load) {
       ? `${amount / 1_000_000} mln`
       : amount.toLocaleString("uz-UZ");
 
-  function formatCurrency(value: "sum" | "usd" | null) {
-    switch (value) {
-      case "sum":
-        return "so'm";
-      case "usd":
-        return "$";
-      default:
-        return "";
-    }
-  }
+
   const formattedCurrency = formatCurrency(currency);
 
   return `${formattedAmount} ${formattedCurrency}`;

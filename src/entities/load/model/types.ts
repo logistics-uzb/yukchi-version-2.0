@@ -22,6 +22,7 @@ export interface Load {
   distanceKm?: number;
   distanceTimeMinutes: number;
   price?: number;
+  pricePerKm: number;
   currency?: string;
   paymentAmount?: number;
   paymentCurrency?: "sum" | "usd" | null;
