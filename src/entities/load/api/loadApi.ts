@@ -4,6 +4,7 @@ import type {
   GetLoadsResponse,
   Load,
   LoadsPage,
+  PostLoadClickCountBody,
 } from "../model/types";
 
 const EMPTY_PAGE: LoadsPage = {
@@ -40,7 +41,14 @@ export const loadApi = baseApi.injectEndpoints({
         };
       },
     }),
+    postLoadClickCount: build.mutation<unknown, PostLoadClickCountBody>({
+      query: (body) => ({
+        url: API_ENDPOINTS.loadClickCount,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetLoadsQuery } = loadApi;
+export const { useGetLoadsQuery, usePostLoadClickCountMutation } = loadApi;

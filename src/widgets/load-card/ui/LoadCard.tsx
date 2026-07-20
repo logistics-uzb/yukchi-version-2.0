@@ -6,7 +6,11 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Tag, Typography } from "antd";
-import type { Load } from "@/entities/load";
+import {
+  usePostLoadClickCountMutation,
+  type Load,
+  type LoadClickType,
+} from "@/entities/load";
 import styles from "./LoadCard.module.css";
 import { Flag } from "@/shared/ui/flag";
 import { regionDetector } from "@/shared/helpers/region-detector";
@@ -27,6 +31,7 @@ interface LoadCardProps {
 
 export function LoadCard({ load }: LoadCardProps) {
   console.log(load, "load");
+  const [postLoadClickCount] = usePostLoadClickCountMutation();
 
   const route = {
     from: {
@@ -60,11 +65,23 @@ export function LoadCard({ load }: LoadCardProps) {
 
   const phone = load.phoneNumber ?? load.phone;
   const phoneUrl = getPhoneUrl(phone);
+  const loadId = load.id ?? load._id;
 
   const timeAgoValue = timeAgo(load.sentToTelegramAt || "");
 
+  const trackContactClick = (type: LoadClickType) => {
+    if (!loadId) return;
+
+    void postLoadClickCount({
+      type,
+      loadId,
+    });
+  };
+
   const callPhone = () => {
     if (!phoneUrl) return;
+
+    trackContactClick("call");
 
     const callLink = document.createElement("a");
     callLink.href = phoneUrl;
@@ -135,6 +152,9 @@ export function LoadCard({ load }: LoadCardProps) {
           size="large"
           icon={<SendOutlined />}
           href={phone ? `https://t.me/${phone}` : undefined}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackContactClick("tg")}
           aria-label="Bog‘lanish"
           disabled={!phone}
         >

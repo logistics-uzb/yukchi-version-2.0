@@ -65,3 +65,10 @@ export interface GetLoadsResponse {
   status_code?: number;
   data?: Partial<LoadsPage>;
 }
+
+export type LoadClickType = "tg" | "call";
+
+export interface PostLoadClickCountBody {
+  type: LoadClickType;
+  loadId: string | number;
+}
