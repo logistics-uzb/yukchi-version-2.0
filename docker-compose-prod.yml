@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_BASE_URL: ${VITE_BASE_URL}
+        VITE_POSTHOG_PROJECT_TOKEN: ${VITE_POSTHOG_PROJECT_TOKEN}
+        VITE_POSTHOG_HOST: ${VITE_POSTHOG_HOST}
     restart: unless-stopped
     ports:
       - "${HOST:-0.0.0.0}:${PORT}:80"
