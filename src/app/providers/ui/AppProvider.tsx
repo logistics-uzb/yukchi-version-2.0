@@ -2,6 +2,7 @@ import { useEffect, type PropsWithChildren } from 'react'
 import { AntProvider } from '../ant-provider'
 import { PostHogProvider } from '../posthog-provider'
 import { StoreProvider } from '../store-provider'
+import { PostHogUserIdentifier } from '@/shared/helpers/user-indentifier'
 
 let isTelegramWebAppInitialized = false
 
@@ -37,6 +38,7 @@ export function AppProvider({ children }: PropsWithChildren) {
 
   return (
     <PostHogProvider>
+      <PostHogUserIdentifier />
       <StoreProvider>
         <AntProvider>{children}</AntProvider>
       </StoreProvider>

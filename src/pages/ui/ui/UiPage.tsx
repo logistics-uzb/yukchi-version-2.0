@@ -6,7 +6,7 @@ import {
   PlusOutlined,
   SearchOutlined,
   UserOutlined,
-} from '@ant-design/icons'
+} from "@ant-design/icons";
 import {
   Alert,
   Avatar,
@@ -32,29 +32,30 @@ import {
   Tag,
   Typography,
   message,
-} from 'antd'
-import type { TableProps } from 'antd'
-import styles from './UiPage.module.css'
+} from "antd";
+import type { TableProps } from "antd";
+import styles from "./UiPage.module.css";
+import { usePostHog } from "@posthog/react";
 
-const { Title, Paragraph, Text } = Typography
-const { TextArea, Password } = Input
+const { Title, Paragraph, Text } = Typography;
+const { TextArea, Password } = Input;
 
 interface UserRow {
-  key: string
-  name: string
-  role: string
-  status: 'Faol' | 'Kutilmoqda'
+  key: string;
+  name: string;
+  role: string;
+  status: "Faol" | "Kutilmoqda";
 }
 
 const users: UserRow[] = [
-  { key: '1', name: 'Ali Valiyev', role: 'Administrator', status: 'Faol' },
-  { key: '2', name: 'Madina Karimova', role: 'Operator', status: 'Kutilmoqda' },
-]
+  { key: "1", name: "Ali Valiyev", role: "Administrator", status: "Faol" },
+  { key: "2", name: "Madina Karimova", role: "Operator", status: "Kutilmoqda" },
+];
 
-const columns: TableProps<UserRow>['columns'] = [
+const columns: TableProps<UserRow>["columns"] = [
   {
-    title: 'Foydalanuvchi',
-    dataIndex: 'name',
+    title: "Foydalanuvchi",
+    dataIndex: "name",
     render: (name: string) => (
       <Space>
         <Avatar icon={<UserOutlined />} />
@@ -62,22 +63,32 @@ const columns: TableProps<UserRow>['columns'] = [
       </Space>
     ),
   },
-  { title: 'Lavozim', dataIndex: 'role' },
+  { title: "Lavozim", dataIndex: "role" },
   {
-    title: 'Holat',
-    dataIndex: 'status',
-    render: (status: UserRow['status']) => (
-      <Tag color={status === 'Faol' ? 'success' : 'warning'}>{status}</Tag>
+    title: "Holat",
+    dataIndex: "status",
+    render: (status: UserRow["status"]) => (
+      <Tag color={status === "Faol" ? "success" : "warning"}>{status}</Tag>
     ),
   },
-]
+];
 
 export function UiPage() {
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, contextHolder] = message.useMessage();
 
   const submitForm = () => {
-    void messageApi.success('Forma muvaffaqiyatli yuborildi')
-  }
+    void messageApi.success("Forma muvaffaqiyatli yuborildi");
+  };
+
+  const posthog = usePostHog();
+
+  const handleClick = () => {
+    posthog?.capture("posthog_test_clicked", {
+      source: "telegram_mini_app",
+      created_at: new Date().toISOString(),
+    });
+  };
+  
 
   return (
     <main className={styles.page}>
@@ -92,6 +103,9 @@ export function UiPage() {
           </Paragraph>
         </div>
 
+        <button type="button" onClick={handleClick}>
+          PostHog test
+        </button>
         <Badge count={3}>
           <Button shape="circle" size="large" icon={<BellOutlined />} />
         </Badge>
@@ -139,7 +153,7 @@ export function UiPage() {
               <Form.Item
                 label="Ism"
                 name="name"
-                rules={[{ required: true, message: 'Ismingizni kiriting' }]}
+                rules={[{ required: true, message: "Ismingizni kiriting" }]}
               >
                 <Input prefix={<UserOutlined />} placeholder="Ismingiz" />
               </Form.Item>
@@ -160,9 +174,9 @@ export function UiPage() {
                 <Select
                   placeholder="Tanlang"
                   options={[
-                    { value: 'web', label: 'Web dasturlash' },
-                    { value: 'mobile', label: 'Mobil dasturlash' },
-                    { value: 'design', label: 'Dizayn' },
+                    { value: "web", label: "Web dasturlash" },
+                    { value: "mobile", label: "Mobil dasturlash" },
+                    { value: "design", label: "Dizayn" },
                   ]}
                 />
               </Form.Item>
@@ -186,7 +200,12 @@ export function UiPage() {
             </div>
 
             <Form.Item label="Izoh" name="comment">
-              <TextArea rows={4} showCount maxLength={250} placeholder="Yozing..." />
+              <TextArea
+                rows={4}
+                showCount
+                maxLength={250}
+                placeholder="Yozing..."
+              />
             </Form.Item>
 
             <Button type="primary" htmlType="submit">
@@ -198,11 +217,11 @@ export function UiPage() {
         <Card title="Tanlash komponentlari" className={styles.card}>
           <Space direction="vertical" size="large" className={styles.fullWidth}>
             <Checkbox.Group
-              defaultValue={['sms']}
+              defaultValue={["sms"]}
               options={[
-                { label: 'SMS', value: 'sms' },
-                { label: 'Email', value: 'email' },
-                { label: 'Telegram', value: 'telegram' },
+                { label: "SMS", value: "sms" },
+                { label: "Email", value: "email" },
+                { label: "Telegram", value: "telegram" },
               ]}
             />
 
@@ -214,7 +233,7 @@ export function UiPage() {
 
             <Segmented<string>
               block
-              options={['Ro‘yxat', 'Jadval', 'Kalendar']}
+              options={["Ro‘yxat", "Jadval", "Kalendar"]}
             />
 
             <Flex justify="space-between" align="center">
@@ -236,9 +255,21 @@ export function UiPage() {
 
         <Card title="Holatlar va feedback" className={styles.card}>
           <Space direction="vertical" size={16} className={styles.fullWidth}>
-            <Alert message="Ma’lumot muvaffaqiyatli saqlandi" type="success" showIcon />
-            <Alert message="Maydonlarni tekshirib chiqing" type="warning" showIcon />
-            <Alert message="Server bilan aloqa mavjud emas" type="error" showIcon />
+            <Alert
+              message="Ma’lumot muvaffaqiyatli saqlandi"
+              type="success"
+              showIcon
+            />
+            <Alert
+              message="Maydonlarni tekshirib chiqing"
+              type="warning"
+              showIcon
+            />
+            <Alert
+              message="Server bilan aloqa mavjud emas"
+              type="error"
+              showIcon
+            />
 
             <Divider />
 
@@ -264,5 +295,5 @@ export function UiPage() {
         </Card>
       </section>
     </main>
-  )
+  );
 }
