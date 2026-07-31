@@ -12,9 +12,6 @@ export function HomePage() {
         <Paragraph className={styles.subtitle}>
           Yo‘nalishni tanlang, sizga mos yuklarni ko‘rsatamiz.
         </Paragraph>
-        <Paragraph className={styles.subtitle} style={{ opacity: 0.5, fontSize: 12 }}>
-          deploy check · 2026-07-31
-        </Paragraph>
       </section>
       <RoutePlanner />
     </main>
