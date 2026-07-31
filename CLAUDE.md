@@ -15,11 +15,17 @@ No test runner is configured.
 
 `src/shared/api/baseApi.ts` reads `VITE_BASE_URL`, then falls back to `VITE_API_URL`, then `/api`. `.env.example` only documents `VITE_BASE_URL`. Auth token is read from `localStorage` as `accessToken` first, then `token`, and sent as `Bearer`.
 
+PostHog analytics is opt-in via env: `VITE_POSTHOG_PROJECT_TOKEN` (required to enable) and `VITE_POSTHOG_HOST` (defaults to `https://us.i.posthog.com`). When the token is absent, `PostHogProvider` renders children unwrapped — no telemetry is captured and no init runs.
+
+## Runtime: Telegram Mini App
+
+This app runs inside Telegram, not as a standalone site. [src/app/providers/ui/AppProvider.tsx](src/app/providers/ui/AppProvider.tsx) calls `window.Telegram.WebApp.ready()` + `expand()` on mount, and `requestFullscreen()` when the Telegram client is ≥ v8.0. All of that is guarded — the app still renders if `window.Telegram.WebApp` is missing, but features depending on it will silently no-op. PostHog `identify` uses `telegram_${initDataUnsafe.user.id}` (see [src/shared/helpers/user-indentifier.tsx](src/shared/helpers/user-indentifier.tsx)); outside Telegram, users stay anonymous.
+
 ## Architecture (Feature-Sliced Design)
 
 Layers under `src/`, allowed to import only downward: `app → pages → widgets → features → entities → shared`. Each slice exposes a public `index.ts`; import from the slice root, never reach into `ui/`, `model/`, or `api/` from outside.
 
-- `app/` — composition root. `providers/` wraps the tree (`StoreProvider` → `AntProvider`), `routes.tsx` declares the router, `ui/AppLayout.tsx` wraps every route and implements a left-edge touch swipe to go back (`navigate(-1)`).
+- `app/` — composition root. `providers/ui/AppProvider.tsx` wraps the tree as `PostHogProvider → StoreProvider → AntProvider` (with a sibling `PostHogUserIdentifier` inside `PostHogProvider`); `routes.tsx` declares the router; `ui/AppLayout.tsx` wraps every route and implements a left-edge (≤300px from left) touch swipe of ≥80px to trigger `navigate(-1)`.
 - `pages/` — route-level screens (`home`, `loads`, `ui`). Each page reads URL search params and composes widgets.
 - `widgets/` — self-contained UI compositions (`route-planner`, `load-card`, `welcome-card`).
 - `features/` — currently empty placeholder; user actions belong here.
