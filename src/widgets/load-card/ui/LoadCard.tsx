@@ -30,7 +30,6 @@ interface LoadCardProps {
 }
 
 export function LoadCard({ load }: LoadCardProps) {
-  console.log(load, "load");
   const [postLoadClickCount] = usePostLoadClickCountMutation();
 
   const route = {
@@ -49,9 +48,7 @@ export function LoadCard({ load }: LoadCardProps) {
     ? `${load.weight} ${load.cargoUnit === "tons" ? "tonna" : (load.cargoUnit ?? "")}`.trim()
     : null;
 
-  const distance = load.distanceKm
-    ? Number(load.distanceKm).toFixed()
-    : "";
+  const distance = load.distanceKm ? Number(load.distanceKm).toFixed() : "";
 
   const pricePerKm = load.pricePerKm
     ? `${Number(load.pricePerKm).toFixed(1)}`
@@ -66,6 +63,8 @@ export function LoadCard({ load }: LoadCardProps) {
   const phone = load.phoneNumber ?? load.phone;
   const phoneUrl = getPhoneUrl(phone);
   const loadId = load.id ?? load._id;
+
+  const tgUsername = load.senderTgUsername ?? load.senderTgUsername;
 
   const timeAgoValue = timeAgo(load.sentToTelegramAt || "");
 
@@ -116,7 +115,9 @@ export function LoadCard({ load }: LoadCardProps) {
         <Flex vertical align="center" className={styles.routeIcons}>
           <EnvironmentOutlined className={styles.startIcon} />
           <div className={styles.line}>
-            <span className={styles.distance}>{setSpaceFromEnd(distance)} km</span>
+            <span className={styles.distance}>
+              {setSpaceFromEnd(distance)} km
+            </span>
           </div>
           <FlagOutlined className={styles.endIcon} />
         </Flex>
@@ -143,25 +144,43 @@ export function LoadCard({ load }: LoadCardProps) {
         {distanceDurationInMinutes && (
           <Tag color="geekblue">{distanceDurationInMinutes}</Tag>
         )}
-        {pricePerKm && <Tag color="geekblue">{setSpaceFromEnd(pricePerKm)} {currency}/km</Tag>}
+        {pricePerKm && (
+          <Tag color="geekblue">
+            {setSpaceFromEnd(pricePerKm)} {currency}/km
+          </Tag>
+        )}
       </Flex>
 
-      <Flex className={styles.actions} gap={8}>
-        <Button
-          className={styles.actionButton}
+      <Flex style={{ width: "100%" }} justify="space-between" gap={8}>
+        {/* <Button
+          style={{ width: "100%" }}
           size="large"
-          icon={<SendOutlined />}
-          href={phone ? `https://t.me/${phone}` : undefined}
+          icon={<WhatsAppOutlined />}
+          href={phone ? `https://wa.me/${phone}` : undefined}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackContactClick("tg")}
           aria-label="Bog‘lanish"
           disabled={!phone}
-        >
-          Telegram
-        </Button>
+        /> */}
+        {tgUsername && (
+          <Button
+            style={{ width: "100%" }}
+            size="large"
+            icon={<SendOutlined />}
+            href={phone ? `https://t.me/${tgUsername}` : undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackContactClick("tg")}
+            aria-label="Bog‘lanish"
+            disabled={!phone}
+          >
+            Telegram
+          </Button>
+        )}
+
         <Button
-          className={styles.actionButton}
+          style={{ width: "100%" }}
           type="primary"
           size="large"
           icon={<PhoneOutlined />}

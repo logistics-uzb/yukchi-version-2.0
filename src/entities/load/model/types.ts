@@ -26,6 +26,7 @@ export interface Load {
   currency?: string;
   paymentAmount?: number;
   paymentCurrency?: "sum" | "usd" | null;
+  senderTgUsername: string | null;
   status?: string;
   phone?: string;
   phoneNumber?: string;

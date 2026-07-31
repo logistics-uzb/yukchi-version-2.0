@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGetLoadsQuery, type Load } from "@/entities/load";
 import { countries } from "@/shared/consts/countries";
 import { LoadCard } from "@/widgets/load-card";
+import { getStoredRoutePlannerValues } from "@/widgets/route-planner/model/route-planner-storage";
 import styles from "./LoadsPage.module.css";
 import { setSpaceFromEnd } from "@/shared/helpers/set-space-from-end";
 
@@ -35,10 +36,22 @@ export function LoadsPage() {
   const [page, setPage] = useState(1);
   const [loads, setLoads] = useState<Load[]>([]);
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const countryFrom = searchParams.get("countryFrom") ?? undefined;
-  const regionFrom = searchParams.get("regionFrom") ?? undefined;
-  const countryTo = searchParams.get("countryTo") ?? undefined;
-  const regionTo = searchParams.get("regionTo") ?? undefined;
+  const storedRoute = getStoredRoutePlannerValues();
+  const hasSearchParams = ["countryFrom", "regionFrom", "countryTo", "regionTo"].some(
+    (key) => searchParams.has(key),
+  );
+  const countryFrom = hasSearchParams
+    ? searchParams.get("countryFrom") ?? undefined
+    : storedRoute.from_country;
+  const regionFrom = hasSearchParams
+    ? searchParams.get("regionFrom") ?? undefined
+    : storedRoute.from_region;
+  const countryTo = hasSearchParams
+    ? searchParams.get("countryTo") ?? undefined
+    : storedRoute.to_country;
+  const regionTo = hasSearchParams
+    ? searchParams.get("regionTo") ?? undefined
+    : storedRoute.to_region;
   const filterKey = [countryFrom, regionFrom, countryTo, regionTo].join("|");
   const params = {
     aiStatus: "LOAD_POST",

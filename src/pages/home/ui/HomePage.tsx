@@ -8,7 +8,7 @@ export function HomePage() {
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
-        <Title className={styles.title}>Qayerga yuk olib borasiz?</Title>
+        <Title className={styles.title}>Qaysi yo'nalishda yuk kerak?</Title>
         <Paragraph className={styles.subtitle}>
           Yo‘nalishni tanlang, sizga mos yuklarni ko‘rsatamiz.
         </Paragraph>

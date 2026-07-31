@@ -126,17 +126,6 @@
   letter-spacing: 0.06em;
 }
 
-.actions {
-  width: 100%;
-}
-
-.actionButton {
-  min-width: 0;
-  flex: 1;
-  padding-inline: 10px;
-  font-weight: 700;
-}
-
 .time {
   display: block;
   margin-top: 8px;

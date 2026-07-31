@@ -100,12 +100,23 @@
   box-shadow: 0 12px 28px rgba(99, 91, 255, 0.32);
 }
 
-.searchButton {
-  width: 100%;
-  height: 52px;
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 12px;
   margin-top: 20px;
+}
+
+.searchButton,
+.clearButton {
+  height: 52px;
   border-radius: 14px;
   font-weight: 600;
+}
+
+.clearButton {
+  color: #697386;
+  border-color: #d9dce5;
 }
 
 @media (max-width: 600px) {
