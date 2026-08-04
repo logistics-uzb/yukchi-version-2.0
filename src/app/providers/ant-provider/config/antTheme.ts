@@ -17,6 +17,7 @@ export const antTheme: ThemeConfig = {
     Input: {
       colorBgContainer: colors.inputBackground,
       colorBorder: colors.border,
+      colorText: colors.primary,
       colorTextPlaceholder: colors.placeholder,
       borderRadius: 12,
       paddingBlock: 10,
@@ -33,6 +34,12 @@ export const antTheme: ThemeConfig = {
       activeShadow: '0 0 0 4px rgba(99, 91, 255, 0.12)',
       errorActiveShadow: '0 0 0 4px rgba(255, 77, 79, 0.12)',
       warningActiveShadow: '0 0 0 4px rgba(250, 173, 20, 0.14)',
+    },
+    InputNumber: {
+      colorText: colors.primary,
+    },
+    Select: {
+      colorText: colors.primary,
     },
   },
 }
