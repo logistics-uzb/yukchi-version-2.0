@@ -1,0 +1,38 @@
+.header {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0 18px;
+  background: rgba(244, 246, 250, 0.9);
+  backdrop-filter: blur(8px);
+  margin-bottom: 16px;
+  border-radius: 12px;
+}
+
+.header > div {
+  min-width: 0;
+}
+
+.header h2 {
+  margin: 0 !important;
+  color: #1f2330;
+}
+
+.eyebrow {
+  display: block;
+  color: #635bff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 380px) {
+  .header {
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 6px;
+  }
+}

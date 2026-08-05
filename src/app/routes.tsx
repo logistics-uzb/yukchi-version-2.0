@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { HomePage } from '@/pages/home'
 import { LoadsPage } from '@/pages/loads'
+import { StatisticsPage } from '@/pages/statistics'
 import { UiPage } from '@/pages/ui'
 import { AppLayout } from './ui/AppLayout'
 
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: '/loads',
         element: <LoadsPage />,
+      },
+      {
+        path: '/statistics',
+        element: <StatisticsPage />,
       },
       {
         path: '/ui',
